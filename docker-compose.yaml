@@ -9,26 +9,29 @@ services:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
     volumes:
-      - ./src:/usr/src/app:delegated
+      - ./config:/workspace/dist/config:delegated
     ports:
       - "4000:4000"
+    networks:
+      - bot-network
 
   redis:
     image: redis:alpine
-    container_name: redis
-    ports:
-      - "6379:6379"
+    # volume for redis data
+    volumes:
+      - ./redis-data:/data
+    # Make sure redis saves snapshots to disk
+    command: redis-server --appendonly yes
     networks:
-      - default
+      - bot-network
 
   mongodb:
     image: mongo:7.0.8
     volumes:
       - ./mongo-data:/data/db
-    ports:
-      - "127.0.0.1:27017:27017"
+    networks:
+      - bot-network
 
 networks:
-  default:
-    name: bot-network
+  bot-network:
     driver: bridge

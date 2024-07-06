@@ -139,7 +139,7 @@ export class ZKillSubscriber {
             data,
             {
                 jobId: 'kill-' + data.killmail_id.toString(),
-                removeOnComplete: true,
+                // removeOnComplete: true,
                 backoff: {
                     type: 'fixed',
                     delay: 60000, // Wait 1 minute before retrying
